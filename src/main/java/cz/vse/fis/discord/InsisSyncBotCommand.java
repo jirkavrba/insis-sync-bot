@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import picocli.CommandLine.Command;
 
+import java.util.Objects;
+
 @Command(name = "insis-sync-bot", description = "...", mixinStandardHelpOptions = true)
 public class InsisSyncBotCommand implements Runnable {
 
@@ -22,7 +24,9 @@ public class InsisSyncBotCommand implements Runnable {
     public void run() {
         logger.info("Starting the InSIS sync bot.");
 
-        final var subjects = service.scrapeAvailableSubjects().block();
+        final var subjects = Objects.requireNonNull(service.scrapeAvailableSubjects().block());
+
+        logger.info("Found a total of {} unique subjects that will be synced", subjects.size());
 
         logger.info("Subjects were synced successfully.");
     }
