@@ -1,0 +1,26 @@
+applicationType: cli
+defaultPackage: cz.vse.fis.discord
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle_kotlin
+features:
+  - app-name
+  - cache-caffeine
+  - graalvm
+  - gradle
+  - http-client
+  - java
+  - junit
+  - logback
+  - lombok
+  - micronaut-build
+  - picocli
+  - picocli-java-application
+  - picocli-junit
+  - reactor
+  - reactor-http-client
+  - readme
+  - serialization-jackson
+  - shade
+  - yaml
+  - yaml-build
