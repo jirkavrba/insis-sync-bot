@@ -27,7 +27,6 @@ public class InsisSyncBotCommand implements Runnable {
         final var subjects = Objects.requireNonNull(service.scrapeAvailableSubjects().block());
 
         logger.info("Found a total of {} unique subjects that will be synced", subjects.size());
-
         logger.info("Subjects were synced successfully.");
     }
 }

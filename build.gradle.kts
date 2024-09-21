@@ -10,6 +10,9 @@ repositories {
     mavenCentral()
 }
 
+val jsoupVersion: String by project
+val discord4jVersion: String by project
+
 dependencies {
     annotationProcessor("org.projectlombok:lombok")
     annotationProcessor("info.picocli:picocli-codegen")
@@ -22,7 +25,8 @@ dependencies {
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.reactor:micronaut-reactor-http-client")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("org.jsoup:jsoup:1.18.1")
+    implementation("org.jsoup:jsoup:$jsoupVersion")
+    implementation("com.discord4j:discord4j-core:$discord4jVersion")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.yaml:snakeyaml")
