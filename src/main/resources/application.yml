@@ -10,3 +10,7 @@ micronaut:
 logger:
   levels:
     io.micronaut.http.client: DEBUG
+
+insis:
+  scraper:
+    parallelism: ${SCRAPING_PARALLELISM:5}

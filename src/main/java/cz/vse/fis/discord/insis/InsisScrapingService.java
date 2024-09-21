@@ -1,5 +1,6 @@
 package cz.vse.fis.discord.insis;
 
+import io.micronaut.context.annotation.Value;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.reactor.http.client.ReactorHttpClient;
 import jakarta.inject.Singleton;
@@ -24,6 +25,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class InsisScrapingService {
 
+    private final int parallelism;
+
     private final ReactorHttpClient client;
 
     private final Logger logger = LoggerFactory.getLogger(InsisScrapingService.class);
@@ -40,14 +43,22 @@ public class InsisScrapingService {
         "hP "
     );
 
+    public InsisScrapingService(
+        @NonNull ReactorHttpClient client,
+        @NonNull @Value("${insis.scraper.parallelism}") Integer parallelism
+    ) {
+        this.client = client;
+        this.parallelism = parallelism;
+    }
+
     @NonNull
     public Mono<Set<InsisSubject>> scrapeAvailableSubjects() {
         return fetchCatalogueUrl()
+            .publishOn(Schedulers.newParallel("subjects-scraping", parallelism))
             .flatMapMany(this::fetchStudyTypeUrls)
             .flatMap(this::fetchStudyProgrammeUrls)
             .flatMap(this::fetchSubjectsListingUrl)
             .flatMap(this::fetchSubjects)
-            .publishOn(Schedulers.newParallel("subjects-scraping", 5))
             .collectList()
             .map(HashSet::new);
     }
