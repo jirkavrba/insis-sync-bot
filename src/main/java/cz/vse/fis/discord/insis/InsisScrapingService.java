@@ -123,8 +123,11 @@ public class InsisScrapingService {
         // Imagine non retarded HTML inside InSIS, life could be dream
         return client.exchange(expandInsisUrl(url), String.class)
             .subscribeOn(Schedulers.boundedElastic())
-            .flatMapMany(response -> {
-                final Document document = Jsoup.parse(response.body());
+            .flatMap(response ->
+                Mono.fromSupplier(() -> Jsoup.parse(response.body()))
+                    .subscribeOn(Schedulers.boundedElastic())
+            )
+            .flatMapMany(document -> {
                 final Elements headings = document.select("table tr.zahlavi");
                 final List<InsisSubject> subjects = headings.stream()
                     .map(Element::nextElementSibling)
