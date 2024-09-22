@@ -34,14 +34,36 @@ public class ChannelActionsService {
                 )
             );
 
+        final List<? extends ChannelAction> createActions = resolveCreateActions(channels, index);
         final List<? extends ChannelAction> renameActions = resolveRenameActions(channels, index);
         final List<? extends ChannelAction> combined =
-            Stream.of(renameActions)
+            Stream.of(createActions, renameActions)
                 .flatMap(Collection::stream)
                 .toList();
 
+        logger.info(
+            "The following channel actions will be performed:\n{}",
+            combined.stream().map(ChannelAction::getAuditLogLine).collect(Collectors.joining("\n"))
+        );
+
         return Flux.fromIterable(combined);
     }
+
+    private List<CreateChannelAction> resolveCreateActions(
+        @NonNull Set<DiscordSubjectChannel> channels,
+        @NonNull Map<String, InsisSubject> subjects
+    ) {
+        final Set<String> channelCodes = channels.stream()
+            .map(channel -> channel.code().toLowerCase())
+            .collect(Collectors.toSet());
+
+        return subjects.values()
+            .stream()
+            .filter(subject -> !channelCodes.contains(subject.code().toLowerCase()))
+            .map(subject -> new CreateChannelAction(buildSubjectChannelName(subject)))
+            .toList();
+    }
+
 
     @NonNull
     private List<RenameChannelAction> resolveRenameActions(
@@ -52,11 +74,8 @@ public class ChannelActionsService {
             .filter(channel -> subjects.containsKey(channel.code().toLowerCase()))
             .map(channel -> {
                 final InsisSubject subject = subjects.get(channel.code().toLowerCase());
-                final String actualName = channel.name();
-                final String expectedName = subject.name()
-                    .toLowerCase()
-                    .replaceAll("[^a-zěščřžýáíé]", "-")
-                    .replaceAll("-{2,}", "-");
+                final String actualName = (subject.code() + "-" + channel.name());
+                final String expectedName = buildSubjectChannelName(subject);
 
                 return new RenameChannelAction(
                     actualName,
@@ -66,5 +85,13 @@ public class ChannelActionsService {
             })
             .filter(action -> !action.oldName().equals(action.newName()))
             .toList();
+    }
+
+    @NonNull
+    private static String buildSubjectChannelName(@NonNull InsisSubject subject) {
+        return (subject.code() + "-" + subject.name())
+            .toLowerCase()
+            .replaceAll("[^a-z0-9ěščřžýáíé]", "-")
+            .replaceAll("-{2,}", "-");
     }
 }

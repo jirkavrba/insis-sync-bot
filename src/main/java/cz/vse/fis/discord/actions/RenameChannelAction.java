@@ -11,6 +11,6 @@ public record RenameChannelAction(
     @NonNull
     @Override
     public String getAuditLogLine() {
-        return String.format("\uD83D\uDCDD renamed channel `%s` to `%s`.", oldName, newName);
+        return String.format("\uD83D\uDCDD Rename channel with ID %s from `%s` to `%s`.", channelId, oldName,  newName);
     }
 }
