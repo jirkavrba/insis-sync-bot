@@ -14,3 +14,7 @@ logger:
 insis:
   scraper:
     parallelism: ${SCRAPING_PARALLELISM:5}
+
+discord:
+  token: ${DISCORD_TOKEN:}
+  guild: ${DISCORD_GUILD_ID:}
