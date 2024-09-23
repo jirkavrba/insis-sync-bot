@@ -1,3 +1,5 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.4.2"
@@ -32,16 +34,14 @@ dependencies {
     runtimeOnly("org.yaml:snakeyaml")
 }
 
-
 application {
     mainClass = "cz.vse.fis.discord.InsisSyncBotCommand"
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("21")
     targetCompatibility = JavaVersion.toVersion("21")
 }
-
-
 
 micronaut {
     testRuntime("junit5")
@@ -51,9 +51,6 @@ micronaut {
     }
 }
 
-
 tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
     jdkVersion = "21"
 }
-
-
