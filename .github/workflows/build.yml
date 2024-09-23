@@ -34,8 +34,6 @@ jobs:
 
       - name: Build Docker image
         run: ./gradlew dockerBuild
-        env:
-          DOCKER_IMAGE: ghcr.io/jirkavrba/insis-sync-bot:latest
 
       - name: Push Docker image to container registry
         run: docker push ghcr.io/jirkavrba/insis-sync-bot:latest

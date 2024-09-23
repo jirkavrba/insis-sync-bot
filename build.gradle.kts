@@ -54,3 +54,7 @@ micronaut {
 tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
     jdkVersion = "21"
 }
+
+tasks.withType<DockerBuildImage> {
+    images = setOf("ghcr.io/jirkavrba/insis-sync-bot")
+}
