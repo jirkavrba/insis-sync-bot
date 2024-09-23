@@ -2,14 +2,23 @@ package cz.vse.fis.discord.bot;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 
 @ConfigurationProperties("discord")
 public record DiscordBotConfiguration(
     @NonNull String token,
-    @NonNull String guild
+    @NonNull String guild,
+    @NonNull String studentRole
 ) {
     public DiscordBotConfiguration {
-        if (token.isBlank()) throw new IllegalArgumentException("Discord token cannot be blank!");
-        if (guild.isBlank()) throw new IllegalArgumentException("Discord guild ID cannot be blank!");
+        validate(token, "Discord token");
+        validate(guild, "Discord guild ID");
+        validate(studentRole, "Student role ID");
+    }
+
+    private static void validate(@Nullable String value, @NonNull String fieldName) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(fieldName + " cannot be blank!");
+        }
     }
 }

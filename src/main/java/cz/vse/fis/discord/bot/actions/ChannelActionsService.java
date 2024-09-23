@@ -1,11 +1,9 @@
-package cz.vse.fis.discord.actions;
+package cz.vse.fis.discord.bot.actions;
 
 import cz.vse.fis.discord.bot.DiscordSubjectChannel;
 import cz.vse.fis.discord.insis.InsisSubject;
 import io.micronaut.core.annotation.NonNull;
 import jakarta.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 
 import java.util.Collection;
@@ -18,8 +16,6 @@ import java.util.stream.Stream;
 
 @Singleton
 public class ChannelActionsService {
-
-    private final Logger logger = LoggerFactory.getLogger(ChannelActionsService.class);
 
     @NonNull
     public Flux<ChannelAction> resolveChannelActions(
@@ -41,11 +37,6 @@ public class ChannelActionsService {
                 .flatMap(Collection::stream)
                 .toList();
 
-        logger.info(
-            "The following channel actions will be performed:\n{}",
-            combined.stream().map(ChannelAction::getAuditLogLine).collect(Collectors.joining("\n"))
-        );
-
         return Flux.fromIterable(combined);
     }
 
@@ -59,8 +50,13 @@ public class ChannelActionsService {
 
         return subjects.values()
             .stream()
+            .filter(subject -> subject.code().toLowerCase().matches("^[a-z0-9]{6}$"))
             .filter(subject -> !channelCodes.contains(subject.code().toLowerCase()))
-            .map(subject -> new CreateChannelAction(buildSubjectChannelName(subject)))
+            .map(subject -> new CreateChannelAction(
+                buildSubjectChannelName(subject),
+                subject.code(),
+                subject.name()
+            ))
             .toList();
     }
 
@@ -91,7 +87,9 @@ public class ChannelActionsService {
     private static String buildSubjectChannelName(@NonNull InsisSubject subject) {
         return (subject.code() + "-" + subject.name())
             .toLowerCase()
-            .replaceAll("[^a-z0-9ěščřžýáíé]", "-")
-            .replaceAll("-{2,}", "-");
+            .replaceAll("[^a-z0-9ěščřžýáíéúů]", "-")
+            .replaceAll("-{2,}", "-")
+            .replaceAll("^-+", "")
+            .replaceAll("-+$", "");
     }
 }

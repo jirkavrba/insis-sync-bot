@@ -1,7 +1,5 @@
 package cz.vse.fis.discord.bot;
 
-import discord4j.common.util.Snowflake;
-import discord4j.core.GatewayDiscordClient;
 import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.channel.TextChannel;
 import io.micronaut.core.annotation.NonNull;
@@ -20,15 +18,11 @@ public class DiscordChannelService {
 
     private final Logger logger = LoggerFactory.getLogger(DiscordChannelService.class);
 
-    @NonNull
-    private final DiscordBotConfiguration configuration;
-
     private static final String SUBJECT_CHANNEL_PATTERN = "^[a-z0-9]{6}-.*";
 
     @NonNull
-    public Mono<Set<DiscordSubjectChannel>> fetchSubjectChannels(final @NonNull GatewayDiscordClient client) {
-        return client.getGuildById(Snowflake.of(configuration.guild()))
-            .flatMapMany(Guild::getChannels)
+    public Mono<Set<DiscordSubjectChannel>> fetchSubjectChannels(final @NonNull Guild guild) {
+        return guild.getChannels()
             .filter(channel -> channel instanceof TextChannel)
             .filter(channel -> channel.getName().matches(SUBJECT_CHANNEL_PATTERN))
             .map(channel -> {

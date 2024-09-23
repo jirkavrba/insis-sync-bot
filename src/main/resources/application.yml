@@ -17,4 +17,5 @@ insis:
 
 discord:
   token: ${DISCORD_TOKEN:}
-  guild: ${DISCORD_GUILD_ID:}
+  guild: ${DISCORD_GUILD_ID:760863954607669269}
+  student-role: ${DISCORD_STUDENT_ROLE_ID:799326721530003546}
