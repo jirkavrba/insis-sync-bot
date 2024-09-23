@@ -12,8 +12,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class OrganizeChannelsAction implements ChannelAction {
@@ -43,17 +41,8 @@ public final class OrganizeChannelsAction implements ChannelAction {
             .cast(TextChannel.class)
             .collectList()
             .flatMap(channels -> {
-                final Map<Boolean, List<TextChannel>> grouped = channels
-                    .stream()
-                    .collect(Collectors.groupingBy(
-                        channel -> channel.getName().matches("^[a-z0-9]{6}-.*"))
-                    );
-
-                final List<TextChannel> subjectChannels = grouped.get(true);
-                final List<TextChannel> nonSubjectChannels = grouped.get(true);
-
-                final int baseOffset = nonSubjectChannels.size();
-                final List<TextChannel> sortedSubjectChannels = subjectChannels.stream()
+                final List<TextChannel> sortedSubjectChannels = channels.stream()
+                    .filter(channel -> channel.getName().matches("^[a-z0-9]{6}-.*"))
                     .sorted(Comparator.comparing(TextChannel::getName))
                     .toList();
 
@@ -62,7 +51,7 @@ public final class OrganizeChannelsAction implements ChannelAction {
                         sortedSubjectChannels
                             .get(index)
                             .edit(TextChannelEditSpec.builder()
-                                .position(baseOffset + index)
+                                .position(channels.size() + index)
                                 .build())
                             .then()
                     ).toList();
