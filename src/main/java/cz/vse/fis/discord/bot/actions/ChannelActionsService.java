@@ -52,6 +52,7 @@ public class ChannelActionsService {
             .stream()
             .filter(subject -> subject.code().toLowerCase().matches("^[a-z0-9]{6}$"))
             .filter(subject -> !channelCodes.contains(subject.code().toLowerCase()))
+            .filter(subject -> !subject.name().toLowerCase().contains("v angličtině"))
             .map(subject -> new CreateChannelAction(
                 buildSubjectChannelName(subject),
                 subject.code(),
