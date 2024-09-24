@@ -5,8 +5,6 @@ import discord4j.core.object.entity.channel.TextChannel;
 import io.micronaut.core.annotation.NonNull;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
@@ -15,8 +13,6 @@ import java.util.Set;
 @Singleton
 @RequiredArgsConstructor
 public class DiscordChannelService {
-
-    private final Logger logger = LoggerFactory.getLogger(DiscordChannelService.class);
 
     private static final String SUBJECT_CHANNEL_PATTERN = "^[a-z0-9]{6}-.*";
 

@@ -45,8 +45,8 @@ public class DefaultInsisScrapingService implements InsisScrapingService {
     );
 
     public DefaultInsisScrapingService(
-        @NonNull ReactorHttpClient client,
-        @NonNull @Value("${insis.scraper.parallelism}") Integer parallelism
+        final @NonNull ReactorHttpClient client,
+        final @NonNull @Value("${insis.scraper.parallelism}") Integer parallelism
     ) {
         this.client = client;
         this.parallelism = parallelism;
@@ -69,8 +69,8 @@ public class DefaultInsisScrapingService implements InsisScrapingService {
                 logger.info("Found a total of {} unique subjects that will be synced", subjects.size());
                 logger.info(
                     subjects.stream()
-                        .map(subject -> String.format("new InsisSubject(\"%s\", \"%s\")", subject.code(), subject.name()))
-                        .collect(Collectors.joining(", "))
+                        .map(subject -> String.format("\"%s\", \"%s\"", subject.code(), subject.name()))
+                        .collect(Collectors.joining("\n"))
                 );
                 return subjects;
             });
@@ -178,6 +178,7 @@ public class DefaultInsisScrapingService implements InsisScrapingService {
     }
 
     // I hate InSIS so fucking much
+    @NonNull
     private String expandInsisUrl(final @NonNull String url) {
         // https://insis.vse.cz/katalog/plany.pl?...
         if (url.startsWith("https://")) {

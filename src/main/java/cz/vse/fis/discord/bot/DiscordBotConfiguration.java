@@ -16,7 +16,10 @@ public record DiscordBotConfiguration(
         validate(studentRole, "Student role ID");
     }
 
-    private static void validate(@Nullable String value, @NonNull String fieldName) {
+    private static void validate(
+        final @Nullable String value,
+        final @NonNull String fieldName
+    ) {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException(fieldName + " cannot be blank!");
         }

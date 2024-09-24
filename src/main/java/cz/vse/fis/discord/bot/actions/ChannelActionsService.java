@@ -40,9 +40,10 @@ public class ChannelActionsService {
         return Flux.fromIterable(combined);
     }
 
+    @NonNull
     private List<CreateChannelAction> resolveCreateActions(
-        @NonNull Set<DiscordSubjectChannel> channels,
-        @NonNull Map<String, InsisSubject> subjects
+        final @NonNull Set<DiscordSubjectChannel> channels,
+        final @NonNull Map<String, InsisSubject> subjects
     ) {
         final Set<String> channelCodes = channels.stream()
             .map(channel -> channel.code().toLowerCase())
@@ -64,8 +65,8 @@ public class ChannelActionsService {
 
     @NonNull
     private List<RenameChannelAction> resolveRenameActions(
-        @NonNull Set<DiscordSubjectChannel> channels,
-        @NonNull Map<String, InsisSubject> subjects
+        final @NonNull Set<DiscordSubjectChannel> channels,
+        final @NonNull Map<String, InsisSubject> subjects
     ) {
         return channels.stream()
             .filter(channel -> subjects.containsKey(channel.code().toLowerCase()))

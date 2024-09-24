@@ -18,6 +18,7 @@ public record RenameChannelAction(
 ) implements ChannelAction {
     private static final Logger logger = LoggerFactory.getLogger(RenameChannelAction.class);
 
+    @NonNull
     @Override
     public Mono<Void> perform(
         final @NonNull Guild guild,

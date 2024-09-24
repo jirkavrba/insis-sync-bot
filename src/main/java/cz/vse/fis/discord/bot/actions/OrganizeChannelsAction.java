@@ -28,6 +28,7 @@ public final class OrganizeChannelsAction implements ChannelAction {
         return INSTANCE;
     }
 
+    @NonNull
     @Override
     public Mono<Void> perform(
         final @NonNull Guild guild,

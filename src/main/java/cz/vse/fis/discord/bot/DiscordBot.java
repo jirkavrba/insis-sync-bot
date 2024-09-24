@@ -32,6 +32,7 @@ public class DiscordBot {
     @NonNull
     private final ChannelActionsService actions;
 
+    @NonNull
     public Mono<Void> start() {
         logger.info("Starting the Discord bot");
 
