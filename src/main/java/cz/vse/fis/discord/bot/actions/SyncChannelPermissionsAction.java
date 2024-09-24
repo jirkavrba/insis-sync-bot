@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
+import static cz.vse.fis.discord.bot.DiscordConstants.SUBJECT_CHANNEL_PATTERN;
+
 public final class SyncChannelPermissionsAction implements ChannelAction {
 
     private static final Logger logger = LoggerFactory.getLogger(SyncChannelPermissionsAction.class);
@@ -41,7 +43,7 @@ public final class SyncChannelPermissionsAction implements ChannelAction {
         return guild.getEveryoneRole().flatMap(everyone ->
             guild.getChannels()
                 .filter(channel -> channel instanceof TextChannel)
-                .filter(channel -> channel.getName().matches("^[a-z0-9]{6}-.*"))
+                .filter(channel -> channel.getName().matches(SUBJECT_CHANNEL_PATTERN))
                 .cast(TextChannel.class)
                 .flatMap(channel -> {
                     logger.info("Syncing permissions for channel #{}", channel.getName());

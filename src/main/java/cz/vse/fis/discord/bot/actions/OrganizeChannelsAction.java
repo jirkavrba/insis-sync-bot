@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static cz.vse.fis.discord.bot.DiscordConstants.SUBJECT_CHANNEL_PATTERN;
+
 public final class OrganizeChannelsAction implements ChannelAction {
 
     private static final Logger logger = LoggerFactory.getLogger(OrganizeChannelsAction.class);
@@ -43,7 +45,7 @@ public final class OrganizeChannelsAction implements ChannelAction {
             .collectList()
             .flatMap(channels -> {
                 final List<TextChannel> sortedSubjectChannels = channels.stream()
-                    .filter(channel -> channel.getName().matches("^[a-z0-9]{6}-.*"))
+                    .filter(channel -> channel.getName().matches(SUBJECT_CHANNEL_PATTERN))
                     .sorted(Comparator.comparing(TextChannel::getName))
                     .toList();
 

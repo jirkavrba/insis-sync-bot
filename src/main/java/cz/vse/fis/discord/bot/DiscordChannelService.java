@@ -10,11 +10,11 @@ import reactor.core.publisher.Mono;
 import java.util.HashSet;
 import java.util.Set;
 
+import static cz.vse.fis.discord.bot.DiscordConstants.SUBJECT_CHANNEL_PATTERN;
+
 @Singleton
 @RequiredArgsConstructor
 public class DiscordChannelService {
-
-    private static final String SUBJECT_CHANNEL_PATTERN = "^[a-z0-9]{6}-.*";
 
     @NonNull
     public Mono<Set<DiscordSubjectChannel>> fetchSubjectChannels(final @NonNull Guild guild) {
